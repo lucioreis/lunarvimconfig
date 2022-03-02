@@ -1,1 +1,4 @@
-{}
+{
+  "vetur.format.defaultFormatter.js": "prettier",
+  "vetur.completion.autoImport": true
+}

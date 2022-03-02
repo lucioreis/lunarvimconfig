@@ -8,22 +8,45 @@ an executable
 ]]
 -- THESE ARE EXAMPLE CONFIGS FEEL FREE TO CHANGE TO WHATEVER YOU WANT
 
+vim.opt.encoding = "utf-8"
+vim.opt.fileencoding = "utf-8"
+-- vim.opt.foldmethod = "expr"
+vim.opt.foldmethod = "syntax"
+vim.opt.foldexpr = "nvim_treesitter#foldexpr()"
+vim.opt.foldlevelstart = 99
+vim.opt.cmdheight = 1
+vim.opt.relativenumber = true
 -- general
 lvim.log.level = "warn"
 lvim.format_on_save = true
 lvim.colorscheme = "onedarker"
-vim.opt.cmdheight = 1
+lvim.scrolloff = 8
+lvim.updatetime = 50
+-- lvim.hidden = true;
 
 -- keymappings [view all the defaults by pressing <leader>Lk]
 lvim.leader = "space"
 -- add your own keymapping
 lvim.keys.normal_mode["<cr>"] = ":w<cr>"
-lvim.keys.normal_mode["<TAB>"] = ":BufferNext<cr>"
-lvim.keys.normal_mode["<S-TAB>"] = ":BufferPrevious<cr>"
+lvim.keys.normal_mode["<TAB>"] = ":BufferLineCycleNext<cr>"
+lvim.keys.normal_mode["<S-TAB>"] = ":BufferLineCyclePrev<cr>"
 lvim.keys.normal_mode["s"] = ":HopWord<cr>"
 lvim.keys.normal_mode["S"] = ":HopLine<cr>"
 lvim.keys.normal_mode["<leader>o"] = ":SymbolsOutline<cr>"
-lvim.keys.normal_mode["ç"] = "$";
+lvim.keys.normal_mode["ç"] = "$"
+lvim.keys.normal_mode["<F12>"] =  ":TermExec cmd='./run.sh'<cr>"
+lvim.keys.normal_mode["<F16>"] = ":%s/\//g" -- abaga ^M aperte (^V^M) inseridos pelo clang
+
+
+
+lvim.keys.normal_mode["<leader>vll"] = ":lua vim.lsp.diagnostic.set_loclist({open_loclist = false})<cr>"
+
+-- correção de teclas
+lvim.keys.insert_mode["ã"] = "ã"
+lvim.keys.insert_mode["é"] = "é"
+lvim.keys.insert_mode["á"] = "á"
+lvim.keys.insert_mode["ó"] = "ó"
+lvim.keys.insert_mode["<M-c>"] = "ç"
 
 lvim.keys.insert_mode["ç"] = "$"
 lvim.keys.insert_mode["jk"] = "<ESC>"
@@ -71,15 +94,17 @@ lvim.builtin.which_key.mappings["t"] = {
 -- After changing plugin config exit and reopen LunarVim, Run :PackerInstall :PackerCompile
 lvim.builtin.dashboard.active = true
 lvim.builtin.notify.active = true
+lvim.builtin.notify.opts.timeout = 5
 lvim.builtin.terminal.active = true
 lvim.builtin.nvimtree.setup.view.side = "left"
 lvim.builtin.nvimtree.show_icons.git = 0
 lvim.builtin.project.patterns = { ".git" }
 lvim.builtin.project.detection_methods = { "pattern" }
+lvim.builtin.telescope.defaults.file_ignore_patterns = { "node_modules", ".git"}
 lvim.builtin.fancy_statusline = { active = true }
-lvim.builtin.telescope.defaults.initial_mode = "normal"
-lvim.builtin.cmp.experimental.ghost_text = false
+lvim.builtin.telescope.defaults.initial_mode = "insert"
 lvim.builtin.telescope.defaults.path_display = { "smart" }
+
 -- if you don't want all the parsers change this to a table of the ones you want
 lvim.builtin.treesitter.ensure_installed = {
   "bash",
@@ -97,6 +122,17 @@ lvim.builtin.treesitter.ensure_installed = {
 
 lvim.builtin.treesitter.ignore_install = { "haskell" }
 lvim.builtin.treesitter.highlight.enabled = true
+lvim.builtin.treesitter.matchup = true;
+lvim.builtin.treesitter.rainbow = true;
+lvim.builtin.treesitter.autotag = {
+  enable = true,
+  disable = { "xml" },
+}
+
+--quick-scope
+vim.cmd [[
+      let g:qs_highlight_on_keys = ['f', 'F', 't', 'T']
+      ]]
 
 -- generic LSP settings
 
@@ -178,6 +214,10 @@ lvim.plugins = {
   },
   {
     "ap/vim-css-color",
+  },
+  {
+    "unblevable/quick-scope",
+
   }
 }
 
@@ -185,3 +225,9 @@ lvim.plugins = {
 -- lvim.autocommands.custom_groups = {
 --   { "BufWinEnter", "*.lua", "setlocal ts=8 sw=8" },
 -- }
+
+
+lvim.autocommands.custom_groups = {
+{"InsertEnter", "*.*", "set norelativenumber"},
+{"InsertLeave", "*.*", "set relativenumber"}
+}
