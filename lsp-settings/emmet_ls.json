@@ -1,5 +1,12 @@
 {
   "emmet.includeLanguages": {
     "typescript": "typescriptreact"
-  }
+  },
+  "filetypes": [
+    "html",
+    "css",
+    "typescriptreact",
+    "javascriptreact",
+    "blade.php"
+  ]
 }

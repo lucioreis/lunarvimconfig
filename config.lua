@@ -7,11 +7,11 @@ a global executable or a path to
 an executable
 ]]
 -- THESE ARE EXAMPLE CONFIGS FEEL FREE TO CHANGE TO WHATEVER YOU WANT
-
+--General config
 vim.opt.encoding = "utf-8"
 vim.opt.fileencoding = "utf-8"
 -- vim.opt.foldmethod = "expr"
-vim.opt.foldmethod = "syntax"
+vim.opt.foldmethod = "manual"
 vim.opt.foldexpr = "nvim_treesitter#foldexpr()"
 vim.opt.foldlevelstart = 99
 vim.opt.cmdheight = 1
@@ -26,21 +26,24 @@ lvim.updatetime = 50
 
 -- keymappings [view all the defaults by pressing <leader>Lk]
 lvim.leader = "space"
+
 -- add your own keymapping
 lvim.keys.normal_mode["<cr>"] = ":w<cr>"
 lvim.keys.normal_mode["<TAB>"] = ":BufferLineCycleNext<cr>"
 lvim.keys.normal_mode["<S-TAB>"] = ":BufferLineCyclePrev<cr>"
 lvim.keys.normal_mode["s"] = ":HopWord<cr>"
 lvim.keys.normal_mode["S"] = ":HopLine<cr>"
-lvim.keys.normal_mode["<leader>o"] = ":SymbolsOutline<cr>"
+-- lvim.keys.normal_mode["<leader>o"] = ":SymbolsOutline<cr>" --uninstalled
 lvim.keys.normal_mode["ç"] = "$"
 lvim.keys.normal_mode["<F12>"] =  ":TermExec cmd='./run.sh'<cr>"
 lvim.keys.normal_mode["<F16>"] = ":%s/\//g" -- abaga ^M aperte (^V^M) inseridos pelo clang
-
-
-
+lvim.keys.normal_mode["n"] = "nzzzv" -- keep the cursor on vertical center
+lvim.keys.normal_mode["N"] = "Nzzzv" -- keep the cursor on vrtical center
+lvim.keys.normal_mode["J"] = "mzJ`z" -- lvim.keys.normal_mode["<leader>ghw"] = ":h <C-R> =expand('<cword>')<CR><CR>"
+lvim.keys.normal_mode["dd"] = [[_dd]]
 lvim.keys.normal_mode["<leader>vll"] = ":lua vim.lsp.diagnostic.set_loclist({open_loclist = false})<cr>"
-
+lvim.keys.normal_mode["<F3>"] =  [[i<C-R>=strftime("%Y-%m-%d %a %I:%M %p")<CR><Esc>]]
+lvim.keys.normal_mode["<F15>"] = [[i<C-R>=strftime("%d-%m-%Y %a %I:%M %p")<CR><ESC>")]]
 -- correção de teclas
 lvim.keys.insert_mode["ã"] = "ã"
 lvim.keys.insert_mode["é"] = "é"
@@ -48,8 +51,10 @@ lvim.keys.insert_mode["á"] = "á"
 lvim.keys.insert_mode["ó"] = "ó"
 lvim.keys.insert_mode["<M-c>"] = "ç"
 
+lvim.keys.insert_mode["<F3>"] = [[<C-R>=strftime("%Y-%m-%d %a %I:%M %p")<CR>]]
 lvim.keys.insert_mode["ç"] = "$"
 lvim.keys.insert_mode["jk"] = "<ESC>"
+lvim.keys.insert_mode['kk'] = "<ESC>"
 lvim.keys.insert_mode["<C-j>"] = "<Down>"
 lvim.keys.insert_mode["<C-k>"] = "<Up>"
 lvim.keys.insert_mode["<C-l>"] = "<Right>"
@@ -61,6 +66,8 @@ lvim.keys.insert_mode["<C-h>"] = "<Left>"
 -- lvim.keys.normal_mode["<C-q>"] = ":q<cr>"
 
 -- Change Telescope navigation to use j and k for navigation and n and p for history in both input and normal mode.
+
+-- Telescope config
 -- we use protected-mode (pcall) just in case the plugin wasn't loaded yet.
 -- local _, actions = pcall(require, "telescope.actions")
 -- lvim.builtin.telescope.defaults.mappings = {
@@ -78,6 +85,7 @@ lvim.keys.insert_mode["<C-h>"] = "<Left>"
   -- },
 -- }
 
+
 -- Use which-key to add extra bindings with the leader-key prefix
 -- lvim.builtin.which_key.mappings["P"] = { "<cmd>Telescope projects<CR>", "Projects" }
 lvim.builtin.which_key.mappings["t"] = {
@@ -90,18 +98,35 @@ lvim.builtin.which_key.mappings["t"] = {
   w = { "<cmd>Trouble workspace_diagnostics<cr>", "Diagnostics" },
 }
 
--- TODO: User Config for predefined plugins
 -- After changing plugin config exit and reopen LunarVim, Run :PackerInstall :PackerCompile
+
+-- Plugin config
 lvim.builtin.dashboard.active = true
+
 lvim.builtin.notify.active = true
-lvim.builtin.notify.opts.timeout = 5
+lvim.builtin.notify.opts.timeout = 10
+
 lvim.builtin.terminal.active = true
+
 lvim.builtin.nvimtree.setup.view.side = "left"
 lvim.builtin.nvimtree.show_icons.git = 0
+lvim.builtin.nvimtree.setup.hijack_netrw = true
+-- lua
+vim.g.nvim_tree_respect_buf_cwd = 1
+
+require("nvim-tree").setup({
+  update_cwd = true,
+  update_focused_file = {
+    enable = true,
+    update_cwd = true
+  },
+})
 lvim.builtin.project.patterns = { ".git" }
 lvim.builtin.project.detection_methods = { "pattern" }
-lvim.builtin.telescope.defaults.file_ignore_patterns = { "node_modules", ".git"}
+
 lvim.builtin.fancy_statusline = { active = true }
+
+lvim.builtin.telescope.defaults.file_ignore_patterns = { "node_modules", ".git"}
 lvim.builtin.telescope.defaults.initial_mode = "insert"
 lvim.builtin.telescope.defaults.path_display = { "smart" }
 
@@ -116,7 +141,6 @@ lvim.builtin.treesitter.ensure_installed = {
   "typescript",
   "css",
   "rust",
-  "java",
   "yaml",
 }
 
@@ -136,6 +160,7 @@ vim.cmd [[
 
 -- generic LSP settings
 
+-- LSP settings
 -- ---@usage disable automatic installation of servers
 -- lvim.lsp.automatic_servers_installation = false
 
@@ -189,8 +214,8 @@ vim.cmd [[
 --     filetypes = { "javascript", "python" },
 --   },
 -- }
-
 -- Additional Plugins
+
 lvim.plugins = {
 --     {"folke/tokyonight.nvim"},
 --     {
@@ -203,9 +228,9 @@ lvim.plugins = {
       require("hop").setup()
     end
   },
-  {
-    "simrat39/symbols-outline.nvim",
-  },
+  -- {
+  --   "simrat39/symbols-outline.nvim",
+  -- },
   {
     "folke/trouble.nvim",
     config = function ()
@@ -218,8 +243,35 @@ lvim.plugins = {
   {
     "unblevable/quick-scope",
 
+  },
+  {
+    "sainnhe/everforest",
+  }, 
+  {
+    "nvim-neorg/neorg",
+    -- tag = "latest",
+    ft = "norg",
+    -- after = {"nvim-treesitter", "telescope"}, -- You may want to specify Telescope here as well
+    config = function()
+    require('neorg').setup {
+       load = {
+        ["core.defaults"] = {},
+        ["core.norg.dirman"] = {
+          config = {
+            workspaces = {
+              work = "~/notes/work",
+              home = "~/notes/home",
+            }
+          }
+        }
+      }
+    }
+    end
+  }, {
+    "tpope/vim-surround"
   }
 }
+
 
 -- Autocommands (https://neovim.io/doc/user/autocmd.html)
 -- lvim.autocommands.custom_groups = {
@@ -231,3 +283,4 @@ lvim.autocommands.custom_groups = {
 {"InsertEnter", "*.*", "set norelativenumber"},
 {"InsertLeave", "*.*", "set relativenumber"}
 }
+
